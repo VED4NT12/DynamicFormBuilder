@@ -1,0 +1,161 @@
+<div class="df-wrapper">
+  <div class="df-card">
+
+    <div class="df-header">
+      <h2>Fill Form</h2>
+      <p>Please complete the form below</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <div class="df-field" *ngFor="let field of fields">
+
+        <label class="df-label">
+          {{ field.label }}
+
+          <span
+            class="df-required"
+            *ngIf="field.required"
+          >
+            *
+          </span>
+        </label>
+
+        <ng-container [ngSwitch]="field.type">
+
+          <!-- TEXT -->
+          <input
+            *ngSwitchCase="'text'"
+            class="df-control"
+            type="text"
+            [placeholder]="field.placeholder"
+            [formControlName]="field.id"
+          />
+
+          <!-- EMAIL -->
+          <input
+            *ngSwitchCase="'email'"
+            class="df-control"
+            type="email"
+            [placeholder]="field.placeholder"
+            [formControlName]="field.id"
+          />
+
+          <!-- NUMBER -->
+          <input
+            *ngSwitchCase="'number'"
+            class="df-control"
+            type="number"
+            [placeholder]="field.placeholder"
+            [formControlName]="field.id"
+          />
+
+          <!-- DATE -->
+          <input
+            *ngSwitchCase="'date'"
+            class="df-control"
+            type="date"
+            [formControlName]="field.id"
+          />
+
+          <!-- TEXTAREA -->
+          <textarea
+            *ngSwitchCase="'textarea'"
+            class="df-control"
+            rows="4"
+            [placeholder]="field.placeholder"
+            [formControlName]="field.id"
+          ></textarea>
+
+          <!-- DROPDOWN -->
+          <select
+            *ngSwitchCase="'dropdown'"
+            class="df-control"
+            [formControlName]="field.id"
+          >
+            <option value="">Select</option>
+
+            <option
+              *ngFor="let option of field.options"
+              [value]="option"
+            >
+              {{ option }}
+            </option>
+
+          </select>
+
+          <!-- RADIO -->
+          <div *ngSwitchCase="'radio'" class="df-options">
+
+            <label
+              class="df-option"
+              *ngFor="let option of field.options"
+            >
+              <input
+                type="radio"
+                [value]="option"
+                [formControlName]="field.id"
+              />
+
+              {{ option }}
+            </label>
+
+          </div>
+
+          <!-- CHECKBOX -->
+          <div *ngSwitchCase="'checkbox'" class="df-options">
+
+            <label
+              class="df-option"
+              *ngFor="let option of field.options"
+            >
+              <input
+                type="checkbox"
+                [checked]="isChecked(field.id, option)"
+                (change)="onCheckboxChange($event, field.id, option)"
+              />
+
+              {{ option }}
+            </label>
+
+          </div>
+
+        </ng-container>
+
+        <div
+          class="df-errors"
+          *ngIf="
+            form.get(field.id)?.invalid &&
+            form.get(field.id)?.touched
+          "
+        >
+          <small *ngIf="form.get(field.id)?.errors?.['required']">
+            Field is required
+          </small>
+
+          <small *ngIf="form.get(field.id)?.errors?.['email']">
+            Invalid email
+          </small>
+
+          <small *ngIf="form.get(field.id)?.errors?.['minlength']">
+            Minimum length not reached
+          </small>
+
+          <small *ngIf="form.get(field.id)?.errors?.['maxlength']">
+            Maximum length exceeded
+          </small>
+        </div>
+
+      </div>
+
+      <button
+        type="submit"
+        class="df-submit"
+      >
+        Submit Form
+      </button>
+
+    </form>
+
+  </div>
+</div>

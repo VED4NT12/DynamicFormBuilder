@@ -1,0 +1,178 @@
+<div class="fb">
+  <header class="fb-header">
+    <h2>Dynamic Form Builder</h2>
+  </header>
+
+  <div
+    class="fb-toolbox"
+    id="toolboxList"
+    cdkDropList
+    [cdkDropListData]="availableFields"
+    [cdkDropListConnectedTo]="['designerList']"
+    cdkDropListSortingDisabled
+  >
+    <button
+      type="button"
+      class="fb-chip"
+      *ngFor="let item of availableFields"
+      cdkDrag
+      [cdkDragData]="item"
+      (click)="addField(item.type)"
+    >
+      {{ item.label }}
+    </button>
+  </div>
+
+  <!-- DESIGNER -->
+  <section class="fb-panel">
+    <h3 class="fb-panel-title">Field Designer</h3>
+
+    <div
+      class="fb-designer-list"
+      id="designerList"
+      cdkDropList
+      [cdkDropListData]="fields"
+      [cdkDropListConnectedTo]="['toolboxList']"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <p class="fb-empty" *ngIf="!fields.length">No fields yet. Pick one from the toolbox above.</p>
+
+      <div
+        class="fb-card"
+        *ngFor="let field of fields; let i = index; trackBy: trackByField"
+        cdkDrag
+        [cdkDragData]="field"
+      >
+        <div class="fb-card-head">
+          <span class="fb-drag" cdkDragHandle> ☰ </span>
+          <input
+            class="fb-input fb-question"
+            [(ngModel)]="field.label"
+            (ngModelChange)="refreshPreview()"
+            placeholder="Question"
+          />
+          <span class="fb-badge">{{ field.type }}</span>
+          <button type="button" class="fb-btn fb-btn-danger" (click)="removeField(i)">
+            Delete
+          </button>
+        </div>
+
+        <label class="fb-check">
+          <input type="checkbox" [(ngModel)]="field.required" (ngModelChange)="refreshPreview()" />
+          <span>Required</span>
+        </label>
+
+        <div
+          class="fb-group"
+          *ngIf="
+            field.type === 'text' ||
+            field.type === 'email' ||
+            field.type === 'number' ||
+            field.type === 'textarea'
+          "
+        >
+          <label class="fb-label">Placeholder</label>
+          <input
+            class="fb-input"
+            [(ngModel)]="field.placeholder"
+            (ngModelChange)="refreshPreview()"
+          />
+        </div>
+
+        <div
+          class="fb-row"
+          *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'textarea'"
+        >
+          <div class="fb-group">
+            <label class="fb-label">Min Length</label>
+            <input
+              class="fb-input"
+              type="number"
+              [(ngModel)]="field.minLength"
+              (ngModelChange)="refreshPreview()"
+            /> 
+          </div>
+          <div class="fb-group">
+            <label class="fb-label">Max Length</label>
+            <input
+              class="fb-input"
+              type="number"
+              [(ngModel)]="field.maxLength"
+              (ngModelChange)="refreshPreview()"
+            />
+          </div>
+        </div>
+
+        <div class="fb-row" *ngIf="field.type === 'number'">
+          <div class="fb-group">
+            <label class="fb-label">Min Value</label>
+            <input
+              class="fb-input"
+              type="number"
+              [(ngModel)]="field.min"
+              (ngModelChange)="refreshPreview()"
+            />
+          </div>
+          <div class="fb-group">
+            <label class="fb-label">Max Value</label>
+            <input
+              class="fb-input"
+              type="number"
+              [(ngModel)]="field.max"
+              (ngModelChange)="refreshPreview()"
+            />
+          </div>
+        </div>
+
+        <div
+          class="fb-group"
+          *ngIf="field.type === 'radio' || field.type === 'checkbox' || field.type === 'dropdown'"
+        >
+          <label class="fb-label">Options</label>
+
+          <div
+            class="fb-option"
+            *ngFor="let option of field.options; let j = index; trackBy: trackByIndex"
+          >
+            <input
+              class="fb-input"
+              [(ngModel)]="field.options![j]"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <button
+              type="button"
+              class="fb-icon-btn"
+              (click)="removeOption(field, j)"
+              aria-label="Remove option"
+            >
+              ✕
+            </button>
+          </div>
+
+          <button type="button" class="fb-btn fb-btn-ghost" (click)="addOption(field)">
+            + Add Option
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREVIEW -->
+  <!-- <section class="fb-panel fb-preview">
+      <h3 class="fb-panel-title">Preview</h3>
+      <app-dynamic-form [fields]="fields"></app-dynamic-form>
+    </section> -->
+  <br />
+  <div class="fb-json-actions">
+    <button type="button" class="fb-btn" (click)="saveForm()">Save Form</button>
+
+    <button type="button" class="fb-btn" (click)="exportJson()">Export JSON</button>
+
+    <button type="button" class="fb-btn" (click)="importJson()">Import JSON</button>
+  </div>
+  <textarea
+    class="fb-json-box"
+    [(ngModel)]="jsonData"
+    placeholder="JSON will appear here..."
+  ></textarea>
+</div>

@@ -1,0 +1,84 @@
+.cdk-drag-preview {
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.35);
+  opacity: 1;
+  transform: scale(1.01);
+  pointer-events: none;
+}
+
+.cdk-drag-preview .fb-drag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 8px;
+  padding: 0;
+}
+
+.cdk-drag-preview.fb-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.16);
+  border: 1px solid #2a3150;
+  border-radius: 999px;
+  cursor: grabbing;
+}
+
+.cdk-drag-preview.fb-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: #1b2136;
+  border: 1px solid #2a3150;
+  border-radius: 12px;
+  color: #e5e7eb;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.3);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.28;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px dashed rgba(99, 102, 241, 0.5);
+  border-radius: 12px;
+}
+
+.cdk-drag-placeholder .fb-card,
+.cdk-drag-placeholder .fb-chip {
+  visibility: hidden;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms ease;
+}
+
+.cdk-drop-list-dragging .fb-card,
+.cdk-drop-list-dragging .fb-chip {
+  transition: transform 250ms ease;
+}
+
+.fb-drag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.08);
+  color: #a5b4fc;
+  font-size: 18px;
+  padding: 0;
+  cursor: grab;
+  user-select: none;
+}
